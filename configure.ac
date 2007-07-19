@@ -74,6 +74,25 @@ AC_SUBST(MMX_CFLAGS)
 
 AM_CONDITIONAL(USE_MMX, test $have_mmx_intrinsics = yes)
 
+dnl ===========================================================================
+
+AC_ARG_ENABLE(jitblt,
+  AS_HELP_STRING([--enable-jitblt],
+                 [Enable the JIT compiler for image compositing]), [
+if test "x$enableval" = "xyes"; then
+  enable_jitblt=yes
+fi
+], [enable_jitblt=no])
+
+AM_CONDITIONAL(JITBLT_ENABLED,
+               test "x$enable_jitblt" = "xyes")
+if test "x$enable_jitblt" = "xyes"; then
+  AC_CHECK_LIB(jolt, main, [],
+               AC_MSG_ERROR([Jitblt requires libjolt. See jitblt/README.]))
+  AC_DEFINE(JITBLT_ENABLED, 1,
+            [Define to 1 to enable the JIT compiler for image compositing])
+fi
+
 dnl ========================================================
 
 PKG_CHECK_MODULES(GTK, [gtk+-2.0], [HAVE_GTK=yes], [HAVE_GTK=no])
