@@ -42,6 +42,10 @@ typedef void (* CompositeFunc) (pixman_op_t,
 				int16_t, int16_t, int16_t, int16_t, int16_t, int16_t,
 				uint16_t, uint16_t);
 
+#ifdef JITBLT_ENABLED
+#   include "pixman-jitblt.h"
+#endif
+
 uint32_t
 fbOver (uint32_t x, uint32_t y)
 {
@@ -2055,6 +2059,17 @@ pixman_image_composite (pixman_op_t      op,
 	if (maskTransform)
 	    maskTransform = FALSE;
     }
+
+#ifdef JITBLT_ENABLED
+    {
+        CompositeFunc jitblt_func =
+            pixman_jitblt_get_composite_func_for (op, pSrc, pMask, pDst,
+                                                  xSrc, ySrc, xMask, yMask,
+                                                  xDst, yDst, width, height);
+        if (jitblt_func)
+            func = jitblt_func;
+    }
+#endif
 
     pixman_walk_composite_region (op, pSrc, pMask, pDst, xSrc, ySrc,
 				  xMask, yMask, xDst, yDst, width, height,
