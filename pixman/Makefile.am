@@ -36,3 +36,11 @@ libpixman_mmx_la_CFLAGS = $(DEP_CFLAGS) $(MMX_CFLAGS)
 libpixman_mmx_la_LIBADD = $(DEP_LIBS)
 libpixman_la_LIBADD += libpixman-mmx.la
 endif
+
+# jitblt (TODO: this could use some work)
+if JITBLT_ENABLED
+libpixman_la_CFLAGS = -I$(top_builddir)/jitblt
+libpixman_la_LDFLAGS = -export-dynamic
+LIBS += $(top_builddir)/jitblt/pixman-jitblt.o # FIXME: hack!
+libpixman_la_LIBADD += -ljolt -ldl
+endif
