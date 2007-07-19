@@ -1,0 +1,97 @@
+- figure out why I'm making cairo-perf segfault
+- figure out what the 'mul' (last arg) part of fbComposeGetStart is for:
+  e.g. 'fbComposeGetStart (pDst, xDst, yDst, uint8_t, dstStride, dstLine, 3)"
+    - do I need to incorporate this into the pixman-startof function?
+- write some performance tests
+- write some performance demos
+    - show off previously slow operations/pixel formats
+    - source transformations will likely be visually impressive
+      (once I get around to implementing them)
+- cache swapR&B results in a slot of the object (must be a slot of the parent!)
+  to avoid memory leaks of lambdas (from creating new swapR&B'ed types over and
+  over again, which creates new lambdas each time). This is only really a
+  problem with CompositingOperators at the moment.
+- write a better function cache for pixman-jitblt.c
+- write (semi-automated) unit tests
+    - load src, mask and dst pngs
+    - convert to various formats using SOURCE
+    - perform SRC IN (and COMPONENT_IN) OP DST for all possible OPs
+    - write out to png
+    - compare between original and jitblt versions (using cairo's imagediff)
+- imagediff says that I'm producing visually different output than original
+  pixman for the following operators (probably because of our sloppy fixed-point
+  multiply adjustments), although I see no difference. I probably should try the
+  higher quality fixed-point multiply adj just to see if it solves the problem
+    - IN
+    - IN_REVERSE
+    - SOURCE
+    - ATOP-REV
+    - there may be more, but no other problems appear for my (small)
+      test data set
+- support the rest of pixman compositing parameters
+    - source transformation
+    - the rest of the pixel formats (GdkPixbuf, etc)
+    - repeat modes
+    - alpha maps
+    - gradients
+    - read/write callbacks
+    - convolution filters
+- optimizations
+    - CSE
+    - be smart about where a simple memcpy will do the trick
+    - alpha look ahead (operation specific)
+        - to make this really worth it, we must modify the inner loop to look
+          ahead multiple pixels at a time
+    - cluster reads/writes to minimize memory access (for < 4 bpp formats)
+        - must modify inner loop to handle two at a time. And this will
+          depend on image format
+    - increase jolt machine instruction vocabulary (e.g. mla)
+        - look for where this would be of some use (maybe very few places?)
+    - SIMD (probably only makes sense for certain formats that line up well)
+        - poor man's SIMD (two channels at a time packed in 32-bits)
+            - have formats implement r08b08 and a08g08 methods and have the
+              operators use them when appropriate?
+            - "store" method for packing pixel-sources with r08b08 and a08g08
+        - MMX/SSE
+            - need a x86-specific optimizer
+            - need to add the instructions (and data types?) to the
+              assembler's vocabulary
+            - have formats implement a a08r08g08b08 method and have the
+              operators use it when appropriate
+        - process multiple pixels at a time somehow?
+            - inner loop must be flexible, maybe allow for operators to create
+              the inner loop?
+    - faster saturate() (implement w/out a branch)
+        - must be aware of representation (8 bit channels)
+        - not a big win
+- make jitblt threadsafe
+    - one big lock around jitblt?
+- what about clipping?
+- integrate the mini glsl compiler (talk with Alex and Ian)
+    - flesh this out to allow access across pixels, certain glsl functions, etc.
+    - expose user API for pixman shaders
+- reduce initial startup time
+    - fixing this will probably require Ian's static code generator (in the works)
+    - UPDATE: when using jitblt from libjolt (as opposed to the command line jolt),
+      this delay is cut in half! Still needs to be much shorter, though.
+    - UPDATE: it appears that the quasiquote expression parser is responsible
+      for most of this delay. Perhaps a reimplementation of qq is "all" that's
+      needed?
+- reduce memory footprint
+    - static footprint (size of libjolt.a is about 2.7MB)
+        - problem is in TEXT area? lots of symbols. Ian's thinking about it
+    - runtime memory use (how much the GC and malloc are allocating)
+    - need Ian's static code generator (in the works)
+- incorporate new cairo compositing semantics
+    - this complicates the clean model we currently have. Look at this
+      very carefully before we "mess with" what we currently have. Could
+      Owen somehow have gotten his desired results with the "old" compositing
+      semantics?
+- implement support for arbitrary pixel formats (which should simplify the
+  pixel-format.k code, as we will be able to create new pixel formats with
+  a single line (perhaps). Like [PixelFormat a: 1 r: 2 g: 3 b: 2] or
+  something.
+- implement floating-point formats?
+- what about HDR?
+- what about sRGB compositing?
+- what about eliminating world hunger?

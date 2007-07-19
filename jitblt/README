@@ -1,0 +1,22 @@
+Jitblt - Just-in-time compilation of image compositing kernels
+Dan Amelang (dan@amelang.net)
+
+What is Jitblt
+==============
+Jitblt is a library for just-in-time (JIT) compilation of image compositing
+kernels. It takes as input a set of compositing parameters (e.g. image formats,
+compositing operators, etc) and outputs machine code that implements the
+desired compositing operation.
+
+Dependencies
+============
+
+Jitblt uses Ian Piumarta's code generation tool code-named "Jolt". To build
+Jitblt, you will need to first install the "embeddable Jolt" library
+(libjolt) first. To do so, check out Ian's idst repository from here:
+
+  http://piumarta.com/svn2/idst/trunk
+
+The README file found in the root directory of the repository contains
+instructions for building and installing libjolt. Questions about libjolt
+should be brought up on the mailing list referenced in that same README.

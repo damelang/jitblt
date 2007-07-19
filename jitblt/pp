@@ -1,0 +1,3 @@
+# Incantation for pretty printing jolt s-expressions
+# Usage: jitblt print-some-sexp.k | pp > sexy-sexp.k
+sed -e 's/|/binaryor/g' | bglpp -w100 | sed -e 's/binaryor/|/g' -e 's/#//g'

@@ -1,0 +1,8 @@
+jolt \
+  super.k \
+  map.k \
+  expression.k \
+  operator.k \
+  pixel-format.k \
+  pixman.k \
+  jitblt-compile.k $@

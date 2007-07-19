@@ -1,0 +1,114 @@
+RENDER OPERATORS IN SHADERESQUE CODE
+
+; src IN dst
+result = src * dst.a
+; src IN mask IN dst
+result = src * mask.a * dst.a
+; src COMPONENT_IN mask IN dst
+result = src * mask * dst.a
+
+; src COMPONENT_IN dst
+result = src * dst
+; src IN mask COMPONENT_IN dst
+result = src * mask.a * dst
+; src COMPONENT_IN mask COMPONENT_IN dst
+result = src * mask * dst
+
+; CLEAR
+result = 0.0
+
+; SOURCE
+result = src
+; src IN mask SOURCE dst
+result = src * mask.a
+; src COMPONENT_IN mask SOURCE dst
+result = src * mask
+
+; DEST
+result = dst
+
+; src OVER dst
+result = src + dst * (1.0 - src.a)
+; src IN mask OVER dst
+result = src * mask.a + dst * (1.0 - src.a * mask.a)
+; src COMPONENT_IN mask OVER dst
+result = src * mask + dst * (1.0 - src.a * mask.a)
+
+; src DEST_OVER dst
+result = src * (1.0 - dst.a) + dst
+; src IN mask DEST_OVER dst
+result = src * mask.a * (1.0 - dst.a) + dst
+; src COMPONENT_IN mask DEST_OVER dst
+result = src * mask * (1.0 - dst.a) + dst
+
+; src DEST_IN dst
+result = src.a * dst
+; src IN mask DEST_IN dst
+result = src.a * mask.a * dst
+; src COMPONENT_IN mask DEST_IN dst
+result = src.a * mask * dst
+
+; src OUT dst
+result = src * (1.0 - dst.a)
+; src IN mask OUT dst
+result = src * mask.a * (1.0 - dst.a)
+; src COMPONENT_IN mask OUT dst
+result = src * mask * (1.0 - dst.a)
+
+; src DEST_OUT dst
+result = (1.0 - src.a) * dst
+; src IN mask DEST_OUT dst
+result = (1.0 - src.a * mask.a) * dst
+; src COMPONENT_IN mask DEST_OUT dst
+result = (1.0 - src.a * mask) * dst
+
+; src ATOP dst
+result = src * dst.a + dst * (1.0 - src.a)
+; src IN mask ATOP dst
+result = src * mask.a * dst.a + dst * (1.0 - src.a * mask.a)
+; src COMPONENT_IN mask ATOP dst
+result = src * mask * dst.a + dst * (1.0 - src.a * mask.a)
+
+; src DEST_ATOP dst
+result = src * (1.0 - dst.a) + dst * src.a
+; src IN mask DEST_ATOP dst
+result = src * mask.a * (1.0 - dst.a) + dst * (src.a * mask.a)
+; src COMPONENT_IN mask DEST_ATOP dst
+result = src * mask * (1.0 - dst.a) + dst * (src.a * mask.a)
+
+; src XOR dst
+result = saturate (src * (1.0 - dst.a) + dst * (1.0 - src.a))
+; src IN mask XOR dst
+result = saturate (src * mask.a * (1.0 - dst.a) + dst * (1.0 - src.a * mask.a))
+; src COMPONENT_IN mask XOR dst
+result = saturate (src * mask * (1.0 - dst.a) + dst * (1.0 - src.a * mask.a))
+
+; src ADD dst
+result = saturate (src + dst)
+; src IN mask ADD dst
+result = saturate (src * mask.a + dst)
+; src COMPONENT_IN mask ADD dst
+result = saturate (src * mask + dst)
+
+; src SATURATE dst
+result = saturate (src * ((1.0 - dst.a) / src.a) + dst)
+; src IN mask SATURATE dst
+result = saturate (src * mask.a * ((1.0 - dst.a) / (src.a * mask.a)) + dst)
+; src COMPONENT_IN mask SATURATE dst
+result = saturate (src * mask * ((1.0 - dst.a) / (src.a * mask.a)) + dst)
+
+; Suggested operations?
+
+; src COMPONENT_OUT dst
+result = src * (1.0 - dst)
+; src IN mask COMPONENT_OUT dst
+result = src * mask.a * (1.0 - dst)
+; src COMPONENT_IN mask COMPONENT_OUT dst
+result = src * mask * (1.0 - dst)
+
+; src COMPONENT_DEST_OUT dst
+result = (1.0 - src) * dst
+; src IN mask COMPONENT_DEST_OUT dst
+result = (1.0 - src * mask.a) * dst
+; src COMPONENT_IN mask COMPONENT_DEST_OUT dst
+result = (1.0 - src * mask) * dst
