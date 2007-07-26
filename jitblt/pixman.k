@@ -38,9 +38,10 @@
 
 (define pixman-BITS 0) ; from enum image_type_t
 
-(define pixman-bpp ; from PIXMAN_FORMAT_BPP
+; The ">> 3" part is to convert from bits-per-pixel to bytes-per-pixel
+(define pixman-bytes-per-pixel ; from PIXMAN_FORMAT_BPP
   (lambda (image)
-    (if image (>> (pixman_image_t->bits.format image) 24) 0)))
+    (if image (>> (>> (pixman_image_t->bits.format image) 24) 3) 0)))
 
 ; Pixman's stride unit is stride_in_bytes / 4, so we have to multiply
 ; the pixman stride by 4 to get the stride in terms of bytes (which is what
@@ -55,6 +56,6 @@
       (if (== (pixman_image_t->type image) pixman-BITS)
         (+ (pixman_image_t->bits.bits image)
           (* y (pixman-strideof image))
-          (* x (pixman-bpp image)))
+          (* x (pixman-bytes-per-pixel image)))
         (&pixman_image_t->solid.color image)) ; SOLID
       0)))

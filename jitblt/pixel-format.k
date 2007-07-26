@@ -40,7 +40,7 @@
   `(set ,var (+ ,var ,amount)))
 
 (define [PixelFormat advance: var]
-  [self advance: var by: [self bpp]])
+  [self advance: var by: [self bytes-per-pixel]])
 
 (define [PixelFormat swapR&B]
   (let ((swapped-format [self _delegated]))
@@ -53,21 +53,21 @@
 ; The null pixel format
 (define-type NONE PixelFormat ())
 (define [NONE advance: var by: amount] '0)
-(define [NONE bpp] '0)
+(define [NONE bytes-per-pixel] '0)
 
 ; 32-bit pixel format
 (define-type PixelFormat-32Bit PixelFormat ())
-(define [PixelFormat-32Bit bpp] '4)
+(define [PixelFormat-32Bit bytes-per-pixel] '4)
 (define [PixelFormat-32Bit @] `(int@ ,[self var]))
 
 ; 16-bit pixel format
 (define-type PixelFormat-16Bit PixelFormat ())
-(define [PixelFormat-16Bit bpp] '2)
+(define [PixelFormat-16Bit bytes-per-pixel] '2)
 (define [PixelFormat-16Bit @] `(short@ ,[self var]))
 
 ; 8-bit Pixel Format
 (define-type PixelFormat-8Bit PixelFormat ())
-(define [PixelFormat-8Bit bpp] '1)
+(define [PixelFormat-8Bit bytes-per-pixel] '1)
 (define [PixelFormat-8Bit @] `(char@ ,[self var]))
 
 ; X8R8G8B8
