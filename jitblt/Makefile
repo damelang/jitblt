@@ -3,6 +3,7 @@
 # The order of these files matters
 JITBLT_SOURCES = \
   super.k \
+	uchar.k \
 	map.k \
 	expression.k \
   operator.k \

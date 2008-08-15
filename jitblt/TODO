@@ -1,9 +1,11 @@
-- figure out why I'm making cairo-perf segfault
+- figure out why I'm making cairo-perf segfault (try again now that the
+  bpp problem is solved)
 - figure out what the 'mul' (last arg) part of fbComposeGetStart is for:
   e.g. 'fbComposeGetStart (pDst, xDst, yDst, uint8_t, dstStride, dstLine, 3)"
     - do I need to incorporate this into the pixman-startof function?
 - write some performance tests
 - write some performance demos
+    - see jitblt-demo.c
     - show off previously slow operations/pixel formats
     - source transformations will likely be visually impressive
       (once I get around to implementing them)
@@ -81,6 +83,7 @@
     - static footprint (size of libjolt.a is about 2.7MB)
         - problem is in TEXT area? lots of symbols. Ian's thinking about it
     - runtime memory use (how much the GC and malloc are allocating)
+        - A lot. An extra 17MB for jitblt-demo.c on N800
     - need Ian's static code generator (in the works)
 - incorporate new cairo compositing semantics
     - this complicates the clean model we currently have. Look at this

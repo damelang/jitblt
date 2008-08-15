@@ -68,7 +68,7 @@
 ; 8-bit Pixel Format
 (define-type PixelFormat-8Bit PixelFormat ())
 (define [PixelFormat-8Bit bytes-per-pixel] '1)
-(define [PixelFormat-8Bit @] `(char@ ,[self var]))
+(define [PixelFormat-8Bit @] `(uchar@ ,[self var]))
 
 ; X8R8G8B8
 (define-type X8R8G8B8 PixelFormat-32Bit ())

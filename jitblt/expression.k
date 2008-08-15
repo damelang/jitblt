@@ -50,7 +50,9 @@
   (let ((head [self at: '0]))
     (cond ; FIXME: we assume two operands (which isn't always true!)
       ((== head '*) ; fixed-point multiplication
-       `(>> ,self 8))
+       ;`(>> ,self 8)) ; the fast, incorrect version
+       `(let ((t (+ (* ,[self at: '1] ,[self at: '2]) 128)))
+          (& (>> (+ (>> t 8) t) 8) 255)))
       ((== head '/) ; fixed-point division
        `(/ (<< ,[self at: '1] 8) ,[self at: '2]))
       (1 self))))

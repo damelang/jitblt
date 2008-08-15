@@ -1,5 +1,6 @@
 jolt \
   super.k \
+  uchar.k \
   map.k \
   expression.k \
   operator.k \

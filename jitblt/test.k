@@ -1,6 +1,9 @@
-; TODO finish this (use writeStream) to I don't have to be so verbose
+; TODO finish this (use writeStream) so I don't have to be so verbose
 ;(syntax test-pipeline
 ;  (lambda (node compiler)
+
+(printf "\n; (jitblt-compile R5G6B5 IN A8 OVER R5G6B5)\n")
+[StdOut println: (jitblt-compile R5G6B5 IN A8 OVER R5G6B5)]
 
 (printf "\n; (jitblt-compile X8B8G8R8 IN A8 OVER A8R8G8B8)\n")
 [StdOut println: (jitblt-compile X8B8G8R8 IN A8 OVER A8R8G8B8)]
